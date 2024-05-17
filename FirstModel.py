@@ -1,4 +1,3 @@
-import numpy
 
 import pandas as pd
 import numpy as np
@@ -131,7 +130,7 @@ loss_chart(results)
 # samp_house = array([
 #     [2, 3, 1280, 5550, 1, 0, 0, 4, 7, 1280, 800, 1440, 5750, 35]
 # ])
-# samp_house = numpy.array(samp_house, dtype=numpy.float64)
+# samp_house = np.array(samp_house, dtype=np.float64)
 #
 # est_price = my_model.predict(samp_house)
 # print(est_price[0])
