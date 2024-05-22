@@ -1,6 +1,6 @@
 import pandas as pd
 
-myCSV = pd.read_csv("Data/wwIIAircraft.csv")
+myCSV = pd.read_csv("../Data/wwIIAircraft.csv")
 
 
 # Comment out some prints to make it easier to see hehe

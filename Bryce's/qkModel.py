@@ -3,7 +3,7 @@ import numpy as np
 from numpy import array
 
 
-model = keras.models.load_model("Models/wine_sample.keras")
+model = keras.models.load_model("../Models/wine_sample.keras")
 
 md_wine = np.array([
     [7.5, 0.71, 0, 1.8, 0.76, 10.88, 34.2, .99, 3.5, 0.55, 9.5]

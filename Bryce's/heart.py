@@ -75,7 +75,7 @@ def do_graph_stuff(dfHeart):
     print(df_low_high.to_string())
 
 
-dfHeart = pd.read_csv("Data/heart_cleveland_upload.csv")
+dfHeart = pd.read_csv("../Data/heart_cleveland_upload.csv")
 
 dfCopy = dfHeart.copy()
 
@@ -105,8 +105,8 @@ model.add(layers.Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 history = model.fit(X, Y, validation_split=0.22, epochs=200)
 
-acc_chart(history)
-loss_chart(history)
+# acc_chart(history)
+# loss_chart(history)
 
 
 X_at_Risk = np.array([

@@ -27,7 +27,7 @@ def loss_chart(results):
     plt.pyplot.show()
 
 
-df = pd.read_csv("Data/kc_house_data.csv")
+df = pd.read_csv("../Data/kc_house_data.csv")
 
 print(df.head().to_string())
 
@@ -93,9 +93,9 @@ print(df.head().to_string())
 # sb.pairplot(df)
 # plt.pyplot.show()
 
-plt.pyplot.figure(figsize=(20, 10))
-sb.heatmap(df.corr(), annot=True)
-plt.pyplot.show()
+# plt.pyplot.figure(figsize=(20, 10))
+# sb.heatmap(df.corr(), annot=True)
+# plt.pyplot.show()
 
 
 # We want to train our model to calculate the
@@ -123,8 +123,8 @@ my_model.add(keras.layers.Dense(1))
 my_model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 results = my_model.fit(X, Y, validation_split=0.33, batch_size=30, epochs=80)
 
-acc_chart(results)
-loss_chart(results)
+# acc_chart(results)
+# loss_chart(results)
 
 # We are going to do some predictive results
 # samp_house = array([

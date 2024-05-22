@@ -62,8 +62,8 @@ history = model.fit(X, y, epochs=150, validation_split=.2, batch_size=100)
 # The batch size will indicate the sample size we are using
 # for this batch size - each epoch will have 15 different sample sets run through it
 
-loss_chart(history)
-acc_chart(history)
+# loss_chart(history)
+# acc_chart(history)
 
 md_wine = np.array([
     [7.5, 0.71, 0, 1.8, 0.76, 10.88, 34.2, .99, 3.5, 0.55, 9.5]

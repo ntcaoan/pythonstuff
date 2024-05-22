@@ -1,6 +1,6 @@
 import pandas as pd
 
-pdBB = pd.read_csv("Data/mlb_salaries.csv")
+pdBB = pd.read_csv("../Data/mlb_salaries.csv")
 
 # Create a DataFrame of only the players who played for Toronto
 pdTOR = pdBB[pdBB["teamid"] == "TOR"]
