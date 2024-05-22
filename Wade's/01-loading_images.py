@@ -63,11 +63,52 @@ print(rolled_cat_img_array.shape)
 
 # %%
 # Since this is a numpy array, we can do whatever we can do to numpy arrays on it
-mutated_cat_array = np.where(cat_img_array < 100, 0, cat_img_array) # if cat_img_array less than 100 -> return 0 if not return cat_img_array
-
+# mutated_cat_array = np.where(cat_img_array < 100, 0, cat_img_array) # if cat_img_array less than 100 -> return 0 if not return cat_img_array
+mutated_cat_array = np.where(cat_img_array < 100, 255, cat_img_array)
+mutated_cat_array = mutated_cat_array * 0.25
+mutated_cat_array = mutated_cat_array.astype(np.uint8)
 mutated_cat_img = Image.fromarray(mutated_cat_array)
 plt.imshow(mutated_cat_img)
 plt.show()
+
+# %%
+# What if we wanted to save this resulting image?
+
+# Let's first create a path for it:
+mutated_cat_file = Path("./data/mutated_images/cat_1_mutated.png")
+print(f"I might need to make my parent directory: {mutated_cat_file.parents[0]}")
+mutated_cat_file.parents[0].mkdir(exist_ok=True)
+print(
+    f"The name of my mutated_cat_file is {mutated_cat_file.name} and its absolute path is {mutated_cat_file.absolute()}")
+
+# To actually save it, just use Image.save
+mutated_cat_img.save(mutated_cat_file, "PNG")
+
+# %%
+
+## DATA AUGMENTATION ##
+
+# How can keras do image augmentation for us?
+# Keras has a bunch of random layers, and we can just pass stuff through
+# Tensorflow expects an id array of images, so it won't like just one single cat
+cat_images_array = cat_img_array.reshape((1,) + cat_img_array.shape)
+print(cat_images_array.shape)
+
+# Let's add some of these keras preprocessing layers:
+image_augmentation = keras.Sequential(
+    [
+        layers.RandomFlip('horizontal', input_shape=(cat_img_array.shape)),
+        layers.RandomRotation(0.1),
+        layers.RandomZoom(0, 1)
+    ]
+)
+
+# Let's generate a few random variations
+for i in range(9):
+    augmented_images = image_augmentation(cat_images_array)
+    plt.imshow(augmented_images[0].numpy().astype(np.uint8))
+    plt.show()
+    print(i)
 
 # %%
 
