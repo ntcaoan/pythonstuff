@@ -1,5 +1,6 @@
 import pandas as pd
 import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 from keras import models, layers
 
@@ -17,6 +18,8 @@ loan_copy['gender'] = loan_copy['gender'].map({0: "Male", 1: "Female"})
 male_data = loan_copy[loan_copy['gender'] == "Male"]
 female_data = loan_copy[loan_copy['gender'] == "Female"]
 
+numeric_columns = loan_copy.select_dtypes(include=[int, int, int, int, float, int, int]).columns
+
 
 # education level be broken to 3 types: High School, Bachelor's, Graduate Level
 def categorize_education(education):
@@ -33,20 +36,104 @@ loan_copy['education_level'] = loan_copy['education_level'].apply(categorize_edu
 # Print the DataFrame to check the categorization
 print(loan_copy)
 
-# If you need to create separate DataFrames for each category:
+# create separate DataFrames for each category:
 bachelor_data = loan_copy[loan_copy['education_level'] == 0]
 graduate_data = loan_copy[loan_copy['education_level'] == 1]
 high_school_data = loan_copy[loan_copy['education_level'] == 2]
 
 # Print the separate DataFrames to check
 print(f"Bachelor's Data: \n{bachelor_data}")
-
 print(f"Graduate Level Data: \n{graduate_data}")
-
 print(f"High School Data: \n{high_school_data}")
 
 # (3) Graphing
-# a. Heatmap for the given Dataframe
-numeric_columns = loan_copy.select_dtypes(include=[int, int, int, int, float, int, int]).columns
+# a) Heatmap for the given Dataframe
 sns.heatmap(loan_copy[numeric_columns].corr(), annot=True)
 plt.show()
+
+
+# b) Histograms:
+# age against approved/denied
+def age_histograms(loan_data):
+    # separate the data based on loan status
+    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
+    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
+
+    # plot histograms for approved loans
+    plt.figure(figsize=(10, 5))
+    plt.hist(approved_data['age'], bins=20, alpha=0.5, color='green', edgecolor='black', label='Approved')
+
+    # plot histograms for denied loans
+    plt.hist(denied_data['age'], bins=20, alpha=0.5, color='red', edgecolor='black', label='Denied')
+
+    plt.legend()
+    plt.title('Histogram of Age for Approved and Denied Loans')
+    plt.xlabel('Age')
+    plt.ylabel('Frequency')
+    plt.show()
+
+
+# education against approved/denied
+def education_histograms(loan_data):
+    # separate the data based on loan status
+    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
+    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
+
+    plt.figure(figsize=(10, 5))
+
+    # plot histograms for approved loans
+    plt.hist(approved_data['education_level'], bins=3, alpha=0.5, color='green', label='Approved', edgecolor='black')
+
+    # plot histograms for denied loans
+    plt.hist(denied_data['education_level'], bins=3, alpha=0.5, color='red', label='Denied', edgecolor='black')
+
+    plt.legend()
+    plt.title('Histogram of Education Level for Approved and Denied Loans')
+    plt.xlabel('Education Level')
+    plt.ylabel('Frequency')
+    plt.xticks(ticks=[0, 1, 2], labels=['Bachelor\'s', 'Graduate Level', 'High School'])
+    plt.show()
+
+
+# married/single status against approved/denied
+def marital_status_histograms(loan_data):
+    # separate the data based on loan status
+    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
+    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
+
+    plt.figure(figsize=(10, 5))
+
+    # approved loans
+    plt.hist(approved_data['marital_status'], bins=3, alpha=0.5, color='green', label='Approved', edgecolor='black')
+    plt.hist(denied_data['marital_status'], bins=3, alpha=0.5, color='red', label='Denied', edgecolor='black')
+
+    plt.legend()
+    plt.title("Histogram of Marital Status for Approved and Denied Loans")
+    plt.xlabel("Marital Status")
+    plt.ylabel("Frequency")
+    plt.xticks(ticks=[0, 1], labels=['Married', 'Single'])
+    plt.show()
+
+
+age_histograms(loan_copy)
+education_histograms(loan_copy)
+marital_status_histograms(loan_copy)
+
+# (4) Create an appropriate mode given the Modified DataFrame you have prepared
+
+# identify the X and Y (X is default for inputs, Y is default for output)
+X = loan_data.drop('loan_status', axis=1)
+Y = loan_data['loan_status']
+
+print("Shape of X is " + str(X.shape))
+print("Shape of Y is %s" % str(Y.shape))
+
+model = models.Sequential()
+model.add(layers.Dense(13, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+
+# might need to use def acc_chart and loss_chart
+# model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+# history = model.fit(X, Y, validation_split=0.22, epochs=200)
+
+
