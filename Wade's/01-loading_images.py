@@ -44,6 +44,7 @@ print(f"The shape of the cat array is {cat_img_array.shape}")
 
 # %%
 # Can also easily go the opposite direction - from a numpy array to an image
+cat_img_array = cat_img_array[:, :, 0]
 new_cat_img = Image.fromarray(cat_img_array)
 plt.imshow(new_cat_img)
 plt.show()
