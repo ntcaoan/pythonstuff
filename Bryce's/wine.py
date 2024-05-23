@@ -28,12 +28,12 @@ def loss_chart(results):
     plt.show()
 
 
-df_wine = pd.read_csv("Data/winequality-red.csv")
+df_wine = pd.read_csv("../Data/winequality-red.csv")
 print(df_wine.head(5).to_string())
 print(df_wine.isna().sum())
 
-# sns.heatmap(df_wine.corr(), annot=True)
-# plt.show()
+sns.heatmap(df_wine.corr(), annot=True)
+plt.show()
 
 # This problem actually is going to have 10 possible outputs
 # This corresponds to the possible quality that might be produce from
