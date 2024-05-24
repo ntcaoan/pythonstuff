@@ -93,15 +93,38 @@ val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 # So when we build our model, we'll use a resclaing layer to standardize the values to be
 # in the 0 to 1 range
 normalization_layer = layers.Rescaling(1./255, input_shape=(IMG_HEIGHT, IMG_WIDTH, 3))
+# We could apply this to our data right now using Dataset.map, but we will just
+# throw it in at the start of our model
 
-# We could apply this
-# throw it in at the
+# %%
+## DATA AUGMENTATION ##
+# data augmentation generates additional training data from existing examples
+# keras provides some pre-processing layers to make doing that easier:
+data_augmentation = Sequential(
+    [
+        layers.RandomFlip("horizontal"),
+        layers.RandomRotation(0.1),
+        layers.RandomZoom(0.1),
+    ]
+)
+
+# Let's visualize a few augmented examples:
+# plt.figure(figsize=(10, 10))
+# for images, _ in train_ds.take(1): # using _ -> me not care what the variable is just need to take 1
+#     for i in range(3):
+#         for j in range(1, 4):
+#             augmented_images = data_augmentation(images)
+#             ax = plt.subplot(3, 3, i * 3 + j)
+#             plt.imshow(augmented_images[i].numpy().astype("uint8"))
+#             plt.axis("off")
+# plt.show()
 
 # %%
 
 num_classes = len(class_names)
 # Building the model
 model = Sequential([
+    layers.Input(shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
     normalization_layer,
     layers.Conv2D(16, 3, padding='same', activation='relu'),
     layers.MaxPooling2D(),
@@ -109,6 +132,7 @@ model = Sequential([
     layers.MaxPooling2D(),
     layers.Conv2D(64, 3, padding='same', activation='relu'),
     layers.MaxPooling2D(),
+    layers.Dropout(0.2), # dropout 20%
     layers.Flatten(),
     layers.Dense(128, activation='relu'),
     layers.Dense(num_classes)
@@ -120,6 +144,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 print(model.summary())
+
 
 # %%
 # Now we can train the model:
@@ -153,8 +178,14 @@ plt.title("Training and Validation Accuracy")
 
 plt.subplot(1, 2, 2)
 plt.plot(epochs_range, loss, label='Training Loss')
-plt.plot(epochs_range, val_loss, labels='Validation Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc="upper right")
 plt.title("Training and Validation Loss")
 
 plt.show()
+
+# %%
+# Let's save the model so we can use it later to make predictions
+model_path = Path("./data/models/flower_model.keras")
+model_path.parent.mkdir(exist_ok=True, parents=True)
+model.save(model_path)
