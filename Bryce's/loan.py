@@ -25,8 +25,54 @@ def loss_chart(results):
     plt.show()
 
 
+# b) Histograms:
 def do_graph_stuff(loan_data):
-    """"""
+    # AGE against approved/denied
+    # separate the data based on loan status
+    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
+    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
+
+    # plot histograms for approved loans
+    plt.figure(figsize=(10, 5))
+    plt.hist(approved_data['age'], bins=20, alpha=0.5, color='green', edgecolor='black', label='Approved')
+
+    # plot histograms for denied loans
+    plt.hist(denied_data['age'], bins=20, alpha=0.5, color='red', edgecolor='black', label='Denied')
+
+    plt.legend()
+    plt.title('Histogram of Age for Approved and Denied Loans')
+    plt.xlabel('Age')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # based on EDUCATION_LEVEL
+    plt.figure(figsize=(10, 5))
+    # plot histograms for approved loans
+    plt.hist(approved_data['education_level'], bins=3, alpha=0.5, color='green', label='Approved', edgecolor='black')
+
+    # plot histograms for denied loans
+    plt.hist(denied_data['education_level'], bins=3, alpha=0.5, color='red', label='Denied', edgecolor='black')
+
+    plt.legend()
+    plt.title('Histogram of Education Level for Approved and Denied Loans')
+    plt.xlabel('Education Level')
+    plt.ylabel('Frequency')
+    plt.xticks(ticks=[0, 1, 2], labels=['Bachelor\'s', 'Graduate Level', 'High School'])
+    plt.show()
+
+    # based on MARITAL_STATUS
+    plt.figure(figsize=(10, 5))
+
+    # approved loans
+    plt.hist(approved_data['marital_status'], bins=3, alpha=0.5, color='green', label='Approved', edgecolor='black')
+    plt.hist(denied_data['marital_status'], bins=3, alpha=0.5, color='red', label='Denied', edgecolor='black')
+
+    plt.legend()
+    plt.title("Histogram of Marital Status for Approved and Denied Loans")
+    plt.xlabel("Marital Status")
+    plt.ylabel("Frequency")
+    plt.xticks(ticks=[0, 1], labels=['Married', 'Single'])
+    plt.show()
 
 
 loan_data = pd.read_csv('../Data/loan.csv')
@@ -38,17 +84,12 @@ print(loan_data.head(15).to_string())
 loan_data.drop(columns=['occupation'], inplace=True)
 loan_copy = loan_data.copy()
 
-# Categorized Strings should be converted to integer Values for the analysis
-# loan_copy['gender'] = loan_copy['gender'].map({0: "Male", 1: "Female"})
-# loan_copy['marital_status'] = loan_copy['marital_status'].map({0: "Married", 1: "Single"})
-# loan_copy['loan_status'] = loan_copy['loan_status'].map({0: "Approved", 1: "Denied"})
-
-# The Categorized Strings should be converted to integer Vales for the analysis.
+# Categorized Strings should be converted to integer Vales for the analysis
 loan_copy['gender'] = loan_copy['gender'].map({"Male": 0, "Female": 1})
 loan_copy['marital_status'] = loan_copy['marital_status'].map({"Single": 0, "Married": 1})
 loan_copy['loan_status'] = loan_copy['loan_status'].map({"Denied": 0, "Approved": 1})
 
-# The education level should be broken up into 3 different types.
+# education level be broken to 3 types: High School, Bachelor's, Graduate Level
 loan_copy['education_level'] = loan_copy['education_level'].map(
     {"High School": 0, "Bachelor's": 1, "Associate's": 1, "Master's": 2, "Doctoral": 2, })
 
@@ -83,73 +124,6 @@ sns.heatmap(loan_copy.corr(), annot=True)
 plt.show()
 
 
-# b) Histograms:
-# age against approved/denied
-def age_histograms(loan_data):
-    # separate the data based on loan status
-    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
-    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
-
-    # plot histograms for approved loans
-    plt.figure(figsize=(10, 5))
-    plt.hist(approved_data['age'], bins=20, alpha=0.5, color='green', edgecolor='black', label='Approved')
-
-    # plot histograms for denied loans
-    plt.hist(denied_data['age'], bins=20, alpha=0.5, color='red', edgecolor='black', label='Denied')
-
-    plt.legend()
-    plt.title('Histogram of Age for Approved and Denied Loans')
-    plt.xlabel('Age')
-    plt.ylabel('Frequency')
-    plt.show()
-
-
-# education against approved/denied
-def education_histograms(loan_data):
-    # separate the data based on loan status
-    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
-    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
-
-    plt.figure(figsize=(10, 5))
-
-    # plot histograms for approved loans
-    plt.hist(approved_data['education_level'], bins=3, alpha=0.5, color='green', label='Approved', edgecolor='black')
-
-    # plot histograms for denied loans
-    plt.hist(denied_data['education_level'], bins=3, alpha=0.5, color='red', label='Denied', edgecolor='black')
-
-    plt.legend()
-    plt.title('Histogram of Education Level for Approved and Denied Loans')
-    plt.xlabel('Education Level')
-    plt.ylabel('Frequency')
-    plt.xticks(ticks=[0, 1, 2], labels=['Bachelor\'s', 'Graduate Level', 'High School'])
-    plt.show()
-
-
-# married/single status against approved/denied
-def marital_status_histograms(loan_data):
-    # separate the data based on loan status
-    approved_data = loan_data[loan_data['loan_status'] == "Approved"]
-    denied_data = loan_data[loan_data['loan_status'] == "Denied"]
-
-    plt.figure(figsize=(10, 5))
-
-    # approved loans
-    plt.hist(approved_data['marital_status'], bins=3, alpha=0.5, color='green', label='Approved', edgecolor='black')
-    plt.hist(denied_data['marital_status'], bins=3, alpha=0.5, color='red', label='Denied', edgecolor='black')
-
-    plt.legend()
-    plt.title("Histogram of Marital Status for Approved and Denied Loans")
-    plt.xlabel("Marital Status")
-    plt.ylabel("Frequency")
-    plt.xticks(ticks=[0, 1], labels=['Married', 'Single'])
-    plt.show()
-
-
-age_histograms(loan_data)
-education_histograms(loan_data)
-marital_status_histograms(loan_data)
-
 # (4) Create an appropriate mode given the Modified DataFrame you have prepared
 
 # identify the X and Y (X is default for inputs, Y is default for output)
@@ -172,3 +146,22 @@ loss_chart(history)
 
 
 # make some trained data about approved and denied loan status
+# the first male got approved (32 0:Male 1:Bachelor's 1:Married 85000 720)
+X_approved = np.array([
+    [32, 0, 1, 1, 85000, 720]
+], dtype=np.float64)
+print(model.predict(X_approved))
+
+Y_approved = (model.predict(X_approved) > 0.5).astype(int)
+print(Y_approved[0])
+
+# a female nurse got denied (24 1:Female 2:Associate's 0:Single 48000 640)
+X_denied = np.array([
+    [24, 1, 2, 0, 48000, 640]
+])
+
+Y_denied = (model.predict(X_denied) > 0.5).astype(int)
+print(Y_denied[0])
+
+# The saved model
+model.save("../Models/loan.keras")

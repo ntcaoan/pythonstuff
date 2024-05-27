@@ -60,7 +60,7 @@ history = model.fit(X, y, epochs=150, validation_split=.2, batch_size=100)
 
 # All entries will be run through the system each epoch
 # The batch size will indicate the sample size we are using
-# for this batch size - each epoch will have 15 different sample sets run through it
+# for this batch modesize - each epoch will have 15 different sample sets run through it
 
 # loss_chart(history)
 # acc_chart(history)
