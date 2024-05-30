@@ -25,6 +25,7 @@ def loss_chart(results):
     plt.show()
 
 
+# identify the top 2 crops for a specified Crop
 def identify_top2_crops(predictions, crop_labels):
     top_indices = np.argsort(predictions)[-2:][::-1]
     return [crop_labels[indice] for indice in top_indices]
